@@ -1,13 +1,9 @@
 version: '3'
 services:
   twitter-video-downloader:
-    image: twitter-video-downloader
-    build:
-      context: https://github.com/Aoismail/XDownloader/
-      dockerfile: Dockerfile
+    image: iixdoii/twitter-video-downloader
     ports:
       - "3000:3000"
-    pull_policy: always
     deploy:
       resources:
         limits:
