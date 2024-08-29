@@ -3,8 +3,7 @@ services:
   twitter-video-downloader:
     image: twitter-video-downloader
     build:
-      context: https://github.com/Aoismail/XDownloader.git
+      context: https://github.com/Aoismail/XDownloader/
       dockerfile: Dockerfile
     ports:
-      - "80:80"
       - "3000:3000"

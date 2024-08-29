@@ -1,11 +1,12 @@
-FROM nginx:alpine
+FROM node:14-alpine
 
-COPY index.html /usr/share/nginx/html/
-COPY server.js /app/
+WORKDIR /app
 
-RUN apk add --no-cache nodejs npm
-RUN npm install express
+COPY package.json ./
+RUN npm install
 
-EXPOSE 80
+COPY . .
 
-CMD ["sh", "-c", "nginx && node /app/server.js"]
+EXPOSE 3000
+
+CMD ["node", "server.js"]
