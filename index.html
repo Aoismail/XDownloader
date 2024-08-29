@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Twitter Video Downloader</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+        <h1 class="text-3xl font-bold mb-6 text-center text-blue-600">Twitter Video Downloader</h1>
+        <form id="download-form" class="space-y-4">
+            <input type="text" id="video-url" placeholder="Enter Twitter video URL" required
+                   class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <button type="submit" 
+                    class="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300">
+                Download
+            </button>
+        </form>
+        <div id="result" class="mt-4 text-center text-gray-700"></div>
+    </div>
+
+    <script>
+        document.getElementById('download-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const url = document.getElementById('video-url').value;
+            const result = document.getElementById('result');
+            result.textContent = 'Downloading...';
+            result.className = 'mt-4 text-center text-blue-500';
+
+            try {
+                const response = await fetch('http://localhost:3000/download', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url })
+                });
+
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const downloadUrl = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = downloadUrl;
+                    a.download = 'twitter_video.mp4';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    result.textContent = 'Download complete!';
+                    result.className = 'mt-4 text-center text-green-500';
+                } else {
+                    result.textContent = 'Error downloading video.';
+                    result.className = 'mt-4 text-center text-red-500';
+                }
+            } catch (error) {
+                result.textContent = 'Error: ' + error.message;
+                result.className = 'mt-4 text-center text-red-500';
+            }
+        });
+    </script>
+</body>
+</html>
