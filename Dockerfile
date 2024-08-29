@@ -1,16 +1,9 @@
-FROM node:14-alpine AS builder
-
-WORKDIR /app
-
-COPY package*.json ./
-RUN npm ci --only=production
-
 FROM node:14-alpine
 
 WORKDIR /app
 
-COPY --from=builder /app/node_modules ./node_modules
-COPY . .
+COPY package*.json ./
+RUN npm install --only=production && npm cache clean --force
 
 EXPOSE 3000
 
